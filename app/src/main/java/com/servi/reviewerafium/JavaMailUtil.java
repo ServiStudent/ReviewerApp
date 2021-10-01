@@ -9,6 +9,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,11 +46,14 @@ public class JavaMailUtil {
 
     private static Message prepareMessage(Session session, String myAccountEmail, String recepient, String text) {
         Message message = new MimeMessage(session);
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd-MM-yyyy 'om' HH:mm");
+        Date date = new Date(System.currentTimeMillis());
         try {
             message.setFrom(new InternetAddress(myAccountEmail));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
             message.setSubject("Review received");
-            message.setText(text);
+            String HTMLCode = "<h2>In-store review ontvangen:</h2>" + "<div style=\"height:100px; background:#c9c9c9\">" + text + "</div>" + "<br/><br/><br/><br/><h4> Ontvangen op: </h4>" + formatter.format(date);
+            message.setContent(HTMLCode, "text/html");
             return message;
         } catch (Exception ex) {
             Logger.getLogger(JavaMailUtil.class.getName()).log(Level.SEVERE, null, ex);
