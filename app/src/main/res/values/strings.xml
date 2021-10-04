@@ -8,5 +8,6 @@
     <string name="send">Verstuur</string>
     <string name="back">Terug</string>
     <string name="callbackmessage">Deze pagina sluit automatisch over 30 seconden.</string>
+    <string name="hint">Vul hier uw feedback in en druk op verstuur.</string>
 
 </resources>

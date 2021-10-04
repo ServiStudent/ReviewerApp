@@ -17,8 +17,8 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="600dp"
-        android:fontFamily="@font/ralewayreg"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/ralewayreg"
         android:text="@string/goodratingcallback"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -29,12 +29,12 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:fontFamily="@font/ralewayreg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/ralewayreg"
         android:text="@string/callbackmessage"
-        android:textStyle="italic"
         android:textSize="16dp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
