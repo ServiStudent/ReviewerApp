@@ -31,28 +31,15 @@ public class BadRatingActivity extends AppCompatActivity {
     }
     Handler handler;
     Runnable r;
-    CountDownTimer c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bad_rating);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(uiOptions);
         EditText editText5 = (EditText) findViewById(R.id.editText5);
         Button button2 = (Button) findViewById(R.id.button2);
         Button button3 = (Button) findViewById(R.id.button3);
-        TextView secs30 = (TextView) findViewById(R.id.secs4);
-        c = new CountDownTimer(30000, 1000) {
 
-            public void onTick(long time) {
-                secs30.setText(" " + time / 1000 + " ");
-            }
-
-            public void onFinish() {
-            }
-        }.start();
 
         handler = new Handler();
         r = new Runnable() {
@@ -71,15 +58,12 @@ public class BadRatingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 startHandler();
-                c.start();
-                System.out.println(time);
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
                 stopHandler();
-                c.cancel();
             }
 
             @Override
@@ -102,6 +86,7 @@ public class BadRatingActivity extends AppCompatActivity {
                 Intent i2 = new Intent(BadRatingActivity.this, BadCallbackActivity.class);
                 startActivity(i2);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                stopHandler();
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {

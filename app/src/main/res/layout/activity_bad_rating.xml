@@ -10,21 +10,9 @@
     tools:context=".BadRatingActivity">
 
     <TextView
-        android:id="@+id/secs4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/ralewayreg"
-        android:text="30"
-        android:textSize="16dp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/secs5" />
-
-    <TextView
         android:id="@+id/secs5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
         android:fontFamily="@font/ralewayreg"
         android:text="@string/inactmessage"
         android:textSize="16dp"

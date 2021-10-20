@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(uiOptions);
 
 
         ImageView imageView1 = (ImageView) findViewById(R.id.imageView1);
