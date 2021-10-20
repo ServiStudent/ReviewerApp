@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +41,7 @@ public class BadRatingActivity extends AppCompatActivity {
         EditText editText5 = (EditText) findViewById(R.id.editText5);
         Button button2 = (Button) findViewById(R.id.button2);
         Button button3 = (Button) findViewById(R.id.button3);
-
+        ImageView backbut = (ImageView) findViewById(R.id.imageView20);
 
         handler = new Handler();
         r = new Runnable() {
@@ -53,6 +54,15 @@ public class BadRatingActivity extends AppCompatActivity {
             }
         };
 
+        backbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopHandler();
+                Intent i2 = new Intent(BadRatingActivity.this, MainActivity.class);
+                startActivity(i2);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+            }
+        });
 
         editText5.addTextChangedListener(new TextWatcher() {
 
