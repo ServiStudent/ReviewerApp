@@ -26,9 +26,6 @@ public class GoodRatingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_good_rating);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(uiOptions);
         TextView secs30 = (TextView) findViewById(R.id.secs2);
         ImageView backbut = (ImageView) findViewById(R.id.imageView12);
 
