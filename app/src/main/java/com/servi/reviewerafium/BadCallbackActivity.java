@@ -17,11 +17,8 @@ Timer timer;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bad_callback);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(uiOptions);
-        timer = new Timer();
 
+        timer = new Timer();
 
         timer.schedule(new TimerTask() {
             @Override

@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name" translatable="false">ReviewerAfium</string>
     <string name="hoofdschermtekst">Bent u tot zover tevreden over uw bezoek?</string>
-    <string name="goodrating">Scan deze code met uw smartphone om een Google review achter te laten. <br /> Op vertoon van deze review ontvangt u €... kassakorting.</string>
+    <string name="goodrating">Scan deze code met uw smartphone om een Google review achter te laten. <br /> Op vertoon van deze review ontvangt u kassakorting.</string>
     <string name="badrating">Wat kunnen wij doen om uw bezoek de volgende keer aangenamer te maken?</string>
     <string name="badratingcallback">Bedankt voor de feedback!</string>
     <string name="goodratingcallback">Bedankt voor de feedback! <br /> Laat uw Google review bij de kassa zien voor een leuke korting.</string>
     <string name="send">Verstuur</string>
     <string name="back">Terug</string>
-    <string name="callbackmessage">Deze pagina sluit automatisch over 30 seconden.</string>
+    <string name="callbackmessage">Deze pagina sluit automatisch over</string>
     <string name="hint">Vul hier uw feedback in en druk op verstuur.</string>
+    <string name="seconds">seconden.</string>
 </resources>

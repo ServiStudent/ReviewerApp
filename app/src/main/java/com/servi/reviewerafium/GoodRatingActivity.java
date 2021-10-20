@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +27,18 @@ public class GoodRatingActivity extends AppCompatActivity {
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(uiOptions);
+        TextView secs30 = (TextView) findViewById(R.id.secs2);
+
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                secs30.setText(" " + millisUntilFinished / 1000 + " ");
+            }
+
+            public void onFinish() {
+            }
+        }.start();
+
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -37,4 +51,5 @@ public class GoodRatingActivity extends AppCompatActivity {
             }
         }, 30000);
     }
+
 }

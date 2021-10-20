@@ -1,0 +1,295 @@
+<template>
+  <div>
+    <sidebar-skeleton v-if="loading" />
+    <div v-else>
+      <h1 class="text-2xl font-bold">{{ $t("retailers.edit.title") }}</h1>
+      <h3 class="text-1xl mb-5">{{ $t("retailers.edit.subtitle") }}</h3>
+      <div class="field mb-3">
+        <label for="name">Name</label>
+        <p-input-text
+          id="name"
+          class="w-full"
+          :class="{ 'p-invalid': hasError('name') }"
+          v-model="editorRetailer.name"
+          type="text"
+        />
+        <small :class="{ 'p-error block': hasError('name') }" class="hidden">{{
+          $t("channels" + fieldErrorMessage("numeric").toString())
+        }}</small>
+      </div>
+      <div class="field mb-3">
+        <label for="email">Email</label>
+        <p-input-text
+          id="email"
+          class="w-full"
+          :class="{ 'p-invalid': hasError('email') }"
+          type="email"
+          v-model="editorRetailer.email"
+        />
+        <small :class="{ 'p-error block': hasError('email') }" class="hidden">{{
+          $t(fieldErrorMessage("email").toString())
+        }}</small>
+      </div>
+      <div class="field mb-3">
+        <label for="logo">Logo</label>
+        <div class="formgroup-inline flex align-items-center">
+          <thumbnail-v2
+            :upload="thumbnailValue || editorRetailer.thumbnail"
+            size="medium"
+          />
+          <thumbnail-uploader
+            :thumbnail="thumbnailValue || editorRetailer.thumbnail"
+            @uploaded="(value) => (thumbnailValue = value)"
+          ></thumbnail-uploader>
+        </div>
+      </div>
+      <div class="field mb-3 flex-row">
+        <label for="color">Color</label>
+        <div class="formgroup-inline copy-color flex align-items-center">
+          <p-color-picker
+            id="color"
+            defaultColor="ffffff"
+            v-model="editorRetailer.color"
+          />
+          <span class="p-input-icon-right">
+          <p-input-text
+            id="color"
+            class="w-half "
+            :class="{ 'p-invalid': hasError('color') }"
+            type="text"
+            v-model="editorRetailer.color"
+            
+          />
+          <i class="pi pi-copy"
+            @click.stop.prevent="copyColorCode"
+          >
+          </i>
+          </span>
+          <input type="hidden" id="copy-color" :value="editorRetailer.color" />
+        </div>
+      </div>
+      .
+      <div class="field">
+        <label>Workspaces</label>
+        <client-multi-select
+          class="w-full"
+          :class="{ 'p-invalid': hasError('client_ids') }"
+          v-model="editorRetailer.clients"
+        />
+        <small
+          :class="{ 'p-error block': hasError('client_ids') }"
+          class="hidden"
+          >{{ $t(fieldErrorMessage("client_ids").toString()) }}</small
+        >
+      </div>
+
+      <div
+        class="
+          sticky
+          bottom-0
+          bg-white
+          border-top-1 border-100
+          flex
+          justify-content-between
+          py-3
+          mt-5
+        "
+      >
+        <div>
+          <p-button
+            label="Cancel"
+            class="p-button-secondary p-button-rounded mr-2"
+            @click="hideDetails"
+          />
+          <p-button
+            :disabled="saving"
+            :label="$t('global.save')"
+            class="p-button-rounded"
+            :icon="saving ? 'mdi mdi-loading pi-spin' : ''"
+            iconPos="right"
+            @click="handleSubmit"
+          />
+        </div>
+        <p-confirm-dialog />
+        <p-button
+          @click.stop="confirmRetailerDelete(editorRetailer.id)"
+          icon="mdi mdi-close"
+          label="Delete"
+          class="p-button-danger p-button-text p-button-rounded"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref, Ref } from "@vue/composition-api";
+import { RetailerDetails } from "@module/retailers/retailers.types";
+import ClientMultiSelect from "@module/clients/components/client-multi-select.v2.vue";
+import ThumbnailV2 from "@module/core/components/thumbnail-v2.vue";
+import ThumbnailUploader from "@module/uploads/components/thumbnail-uploader.vue";
+import SidebarSkeleton from "@module/skeletons/sidebar-skeleton.vue";
+import { Client } from "@module/clients/clients.types";
+import { Upload } from "@module/uploads/uploads.types";
+import useFormValidation from "@/utils/form-validation.v2";
+
+export default defineComponent({
+  components: {
+    ClientMultiSelect,
+    ThumbnailV2,
+    ThumbnailUploader,
+    SidebarSkeleton,
+  },
+
+  setup(props, { root, emit }) {
+    const { resetFormErrors, parseFormError, fieldErrorMessage, hasError } =
+      useFormValidation();
+
+    const loading = ref(false);
+    const saving = ref(false);
+
+    const editorRetailer = ref({} as RetailerDetails);
+
+    const thumbnailValue: Ref<Partial<Upload> | null> = ref(null);
+
+    const copyColorCode = () => {
+      const colorCodeToCopy = document.querySelector("#copy-color");
+      colorCodeToCopy!.setAttribute("type", "text"); 
+      colorCodeToCopy!.select();
+
+      try {
+        const successful = document.execCommand("copy");
+        root.$toast.add({
+          severity: "success",
+          summary: "Color Copied",
+          detail: "Successfully copied color",
+          life: 3000,
+        });
+      } catch (err) {
+         root.$toast.add({
+          severity: "error",
+          summary: "Color not copied",
+          detail: "Unsuccesfull at copying the color",
+          life: 3000,
+        });
+      }
+      colorCodeToCopy!.setAttribute("type", "hidden");
+      window!.getSelection().removeAllRanges();
+    };
+
+    const hideDetails = () => {
+      emit("hide");
+    };
+
+    const handleSubmit = async (): Promise<void> => {
+      resetFormErrors();
+      try {
+        saving.value = true;
+        const retailer = {
+          email: editorRetailer.value.email,
+          name: editorRetailer.value.name,
+          thumbnail_id:
+            thumbnailValue.value !== undefined
+              ? thumbnailValue.value?.id
+              : undefined,
+          color: editorRetailer.value.color,
+          client_ids: editorRetailer.value.clients?.map(
+            (client: Client) => client.id
+          ),
+        };
+
+        await root.$store.dispatch("retailers/UPDATE_RETAILER", {
+          id: parseInt(root.$route.params.id, 10),
+          retailer,
+        });
+
+        emit("refresh");
+        emit("hide");
+        root.$toast.add({
+          severity: "success",
+          summary: "Successfully Created",
+          detail: "Successfully created a new supplier",
+          life: 3000,
+        });
+      } catch (err) {
+        parseFormError(err, () => {
+          root.$toast.add({
+            severity: "error",
+            summary: "Error Message",
+            detail:
+              "We were unable to create a new retailer. Please try again.",
+            life: 3000,
+          });
+        });
+      } finally {
+        saving.value = false;
+      }
+    };
+
+    const deleteRetailer = async (id: number): Promise<void> => {
+      loading.value = true;
+      try {
+        await root.$store.dispatch("retailers/DELETE_RETAILER", { id });
+        emit("refresh");
+        emit("hide");
+        root.$toast.add({
+          severity: "success",
+          summary: "Successful Deletion",
+          detail: "The retailer was successfully deleted",
+          life: 3000,
+        });
+      } catch (err) {
+        root.$toast.add({
+          severity: "error",
+          summary: "Error Message",
+          detail: "We were unable to delete the retailer. Please try again.",
+          life: 3000,
+        });
+      }
+      loading.value = false;
+    };
+
+    const confirmRetailerDelete = (id: number) => {
+      root.$confirm.require({
+        header: "Delete supplier",
+        icon: "mdi mdi-information-outline",
+        message: `Are you sure you want to remove: ${editorRetailer.value.name} ?`,
+        acceptClass: "p-button-danger",
+        accept: () => deleteRetailer(id),
+      });
+    };
+
+    onMounted(async () => {
+      loading.value = true;
+      editorRetailer.value = await root.$store.dispatch(
+        "retailers/FIND_RETAILER",
+        {
+          id: root.$route.params.id,
+        }
+      );
+      loading.value = false;
+    });
+
+    return {
+      fieldErrorMessage,
+      hasError,
+      loading,
+      saving,
+      editorRetailer,
+      copyColorCode,
+      confirmRetailerDelete,
+      hideDetails,
+      handleSubmit,
+      thumbnailValue,
+    };
+  },
+});
+</script>
+
+<style lang="css" scoped>
+.upload-button {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+</style>
