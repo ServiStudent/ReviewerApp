@@ -4,6 +4,7 @@ package com.servi.reviewerafium;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BadRatingActivity extends AppCompatActivity {
-    private int time = 10000;
+    private int time = 30000;
 
     @Override
     public void onBackPressed() {
@@ -29,15 +31,28 @@ public class BadRatingActivity extends AppCompatActivity {
     }
     Handler handler;
     Runnable r;
+    CountDownTimer c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bad_rating);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(uiOptions);
         EditText editText5 = (EditText) findViewById(R.id.editText5);
         Button button2 = (Button) findViewById(R.id.button2);
         Button button3 = (Button) findViewById(R.id.button3);
+        TextView secs30 = (TextView) findViewById(R.id.secs4);
+        c = new CountDownTimer(30000, 1000) {
+
+            public void onTick(long time) {
+                secs30.setText(" " + time / 1000 + " ");
+            }
+
+            public void onFinish() {
+            }
+        }.start();
 
         handler = new Handler();
         r = new Runnable() {
@@ -50,19 +65,21 @@ public class BadRatingActivity extends AppCompatActivity {
             }
         };
 
+
         editText5.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
-                startHandler(300);
-                System.out.println("Started");
+                startHandler();
+                c.start();
+                System.out.println(time);
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
                 stopHandler();
-                System.out.println("Stopped");
+                c.cancel();
             }
 
             @Override
@@ -71,7 +88,7 @@ public class BadRatingActivity extends AppCompatActivity {
             }
         });
 
-        startHandler(0);
+        startHandler();
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +110,7 @@ public class BadRatingActivity extends AppCompatActivity {
                 Intent i1 = new Intent(BadRatingActivity.this, MainActivity.class);
                 startActivity(i1);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                stopHandler();
             }
         });
 
@@ -117,9 +135,8 @@ public class BadRatingActivity extends AppCompatActivity {
     public void stopHandler() {
         handler.removeCallbacks(r);
     }
-    public void startHandler(int a) {
-        time += a;
+    public void startHandler() {
+        time = 30000;
         handler.postDelayed(r, time);
-        System.out.println(time);
     }
 }

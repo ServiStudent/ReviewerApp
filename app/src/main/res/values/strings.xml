@@ -10,5 +10,6 @@
     <string name="callbackmessage">Deze pagina sluit automatisch over</string>
     <string name="hint">Vul hier uw feedback in en druk op verstuur.</string>
     <string name="seconds">seconden.</string>
+    <string name="inactmessage">Deze pagina sluit automatisch na 30 seconden inactiviteit. Seconden over:</string>
 
 </resources>
