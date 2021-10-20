@@ -23,6 +23,7 @@ import java.util.TimerTask;
 
 public class BadRatingActivity extends AppCompatActivity {
     private int time = 30000;
+    private String text;
 
     @Override
     public void onBackPressed() {
@@ -58,6 +59,7 @@ public class BadRatingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 startHandler();
+                text = editText5.getText().toString();
             }
 
             @Override
@@ -78,8 +80,7 @@ public class BadRatingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    String text = editText5.getText().toString();
-                    JavaMailUtil.sendMail("afiumreviewer@gmail.com", text);
+                                        JavaMailUtil.sendMail("afiumreviewer@gmail.com", text);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

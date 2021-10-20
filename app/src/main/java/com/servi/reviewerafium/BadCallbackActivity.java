@@ -25,8 +25,8 @@ Timer timer;
             public void run() {
                 Intent i5 = new Intent(BadCallbackActivity.this, MainActivity.class);
                 startActivity(i5);
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 finish();
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         }, 5000);
     }

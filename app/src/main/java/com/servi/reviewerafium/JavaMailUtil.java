@@ -29,7 +29,7 @@ public class JavaMailUtil {
         properties.put("mail.smtp.port", "587");
 
         String myAccountEmail = "afiumreviewer@gmail.com";
-        String password = "AfiumTest123!";
+        String password = "AfiumTest123?";
         
         Session session = Session.getInstance(properties, new Authenticator(){
             @Override
